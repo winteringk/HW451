@@ -1,0 +1,127 @@
+#include<iostream>
+using namespace std;
+
+int c, last_finish;
+
+class node{
+	public:
+		int first, last;
+		node* left;
+		node* right;
+};
+
+class AVLTree{
+	private:
+		node* root;
+	
+	public:
+		AVLTree(){
+			root = NULL;
+		}
+		
+		void insert(int num){ //insert node
+			int first, last, i;
+      
+			for(i = 0; num > i; i++){//input data
+				  scanf("%d", &first);
+				  scanf("%d", &last);
+				
+				// create
+				node* newNode = new node();
+				newNode->first = first;
+				newNode->last = last;
+				newNode->left = NULL;
+				newNode->right = NULL;
+				
+				
+				if(root == NULL){
+					root = newNode;
+				}
+				else{
+					//Find the last node and update pointers
+					node* lastNode = root;
+					while(true){
+						if(lastNode->last > last){ //Move left
+							if(lastNode->left == NULL){
+								lastNode->left = newNode;
+								break;
+							}
+							else{
+								lastNode = lastNode->left;
+							}
+						}
+						else if(lastNode->last < last){ //Move right
+							if(lastNode->right == NULL){
+								lastNode->right = newNode;
+								break;
+							}
+							else{
+								lastNode = lastNode->right;
+							}
+						}
+						else{ //If (lastNode->finish == finish), then use the start variable for comparison instead.
+							if(lastNode->first >= first){ //Move left
+								if(lastNode->left == NULL){
+									lastNode->left = newNode;
+									break;
+								}
+								else{
+									lastNode = lastNode->left;
+								}
+							}
+							else if(lastNode->first < first){ //Move right
+								if(lastNode->right == NULL){
+									lastNode->right = newNode;
+									break;
+								}
+								else{
+									lastNode = lastNode->right;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+		}
+		
+		void setMaxCompetition(node* currentNode){
+			  if(currentNode == NULL){
+          return;
+          }
+			  setMaxCompetition(currentNode->left);
+			
+			if(last_finish <= currentNode->first){
+				  c++;
+				last_finish = currentNode->last;
+			}
+			
+			setMaxCompetition(currentNode->right);
+			}
+
+		node* getRoot() {return root;}
+};
+
+int main(){
+	int numData, numTime, t;
+  
+	scanf("%d", & numData);
+	AVLTree tree[numData];
+	
+	// input
+	for(t = 0; t < numData; t++){
+		scanf("%d", & numTime);
+		tree[t].insert(numTime);
+	}
+	
+	// calculate 
+	for(t = 0; t < numData; t++){
+		c = 0;
+		last_finish=-1;
+		
+		tree[t].setMaxCompetition(tree[t].getRoot());
+			cout << c << endl;
+	}
+	
+	return 0;
+}
