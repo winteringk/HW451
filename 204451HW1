@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+string findPathSBT(int m, int n, string p, int m_l, int m_r, int n_l, int n_r);
+
+int main(){
+	int m;
+  int n;
+	cin >> m;
+  cin >> n;
+	cout << findPathSBT(m, n, "", 0, 1, 1, 0);
+  
+	return 0;
+}
+
+string findPathSBT(int m, int n, string p, int m_l, int m_r, int n_l, int n_r)
+{
+	double g = double(m_l + m_r)/double(n_l + n_r);
+	double q = double(m)/double(n);
+  
+	if ((n == n_l + n_r) && (m == m_l + m_r))
+  { //base case
+		return p;
+	}
+  
+	if (g > q)
+  { //if m/n less than m(left+right)/n(left+right) move left
+		return findPathSBT( m, n, p+"L",m_l, m_l+m_r, n_l, n_l+n_r);
+	}
+
+  if (g < q)
+  { //if m/n more than m(left+right)/n(left+right) move right
+		return findPathSBT(m, n, p+"R", m_l+m_r, m_r, n_l+n_r, n_r); 
+	}
+}
